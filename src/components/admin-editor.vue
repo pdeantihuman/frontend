@@ -14,12 +14,12 @@
                 var editor = new Simditor({
                     textarea: $('#editor'),
                         upload: {
-                            url: '',//TODO:后台上传图片路径，由前端向后台获取：'{{ route('topics.upload_image') }}'
-                        params: { _token: '{{ csrf_token() }}' },
-                        fileKey: 'upload_file',
-                        connectionCount: 3,
-                        leaveConfirm: '文件上传中，关闭此页面将取消上传。'
-                    },
+                            url: 'api/upload_image',
+                            params: {},
+                            fileKey: 'upload_file',
+                            connectionCount: 3,
+                            leaveConfirm: '文件上传中，关闭此页面将取消上传。'
+                        },
                     pasteImage: true,
                 });
             });
