@@ -19,7 +19,7 @@
             }
         },
         mounted(){
-            this.axios.get("http://10.1.38.20/api/articles?onlyRoot=1")
+            axios.get("http://10.1.38.20/api/articles?onlyRoot=1")
                 .then(response => {
                     let data = response.data.data                         //const:常量 let:局部变量 var:全局变量   三种变量
                     this.helpdocuments = data                               //传递后端参数

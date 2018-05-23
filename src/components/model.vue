@@ -35,7 +35,7 @@
                 const post_del_num = this.node_del_num;
                 const post_url = `http://10.1.38.20/api/articles/${post_del_num}?id=${post_del_num}`;
                 this.modal_loading = true;
-                this.axios.delete(post_url)
+                axios.delete(post_url)
                     .then(response=>{
                         console.log(response.status)
                         if (response.status === 204){

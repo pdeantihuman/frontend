@@ -181,7 +181,7 @@
         	loadData (item, callback) {
         	    let url = `api/articles/${this.docId}/tree`;
         	    console.log(url);
-                this.axios.get('api/articles/9/tree')
+                axios.get('api/articles/9/tree')
                     .then(response => {
                     const data = [
                         response.data,
