@@ -84,8 +84,14 @@ module.exports = {
     performance: {
         hints: false
     },
-    devtool: '#eval-source-map'
+    devtool: '#eval-source-map',
 }
+
+module.exports.plugins = (module.exports.plugins || []).concat([
+        new webpack.ProvidePlugin({//配置全局使用jquery
+            $: "jquery",
+            jQuery: "jquery"
+        })
 
 if (process.env.NODE_ENV === 'production') {
     module.exports.devtool = '#source-map'
@@ -105,9 +111,5 @@ if (process.env.NODE_ENV === 'production') {
         new webpack.LoaderOptionsPlugin({
             minimize: true
         }),
-        new webpack.ProvidePlugin({//配置全局使用jquery
-            $: "jquery",
-            jQuery: "jquery"
-        })
     ])
 }
