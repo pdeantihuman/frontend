@@ -11,7 +11,6 @@ const routes = [
     { path:'/',component:List },
     { path:'/List',component:List },
     { path:'/Form',component:Form },
-    { path:'/Build/:id',component:Form,props:true },
     { path:'/Login',component:Login }
 ]
 const router = new VueRouter({

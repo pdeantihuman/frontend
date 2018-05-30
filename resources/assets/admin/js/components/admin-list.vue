@@ -24,7 +24,6 @@
                     for(let i in response.data){
                         let a = { message:response.data[i] };
                         this.helpdocuments.push(a);
-                        console.log(this.helpdocuments);
                     }
                 });
         },

@@ -10,6 +10,7 @@
 
 <script>
     import model from './model'
+    import api from "../api/api";
 
     export default {
         name: "admin-list",
@@ -19,11 +20,10 @@
             }
         },
         mounted(){
-            axios.get("http://10.1.38.20/api/articles?onlyRoot=1")
+            axios.get(api.list)
                 .then(response => {
-                    let data = response.data.data                         //const:常量 let:局部变量 var:全局变量   三种变量
-                    this.helpdocuments = data                               //传递后端参数
-                    console.log(this.helpdocuments);
+                    let data = response.data.data
+                    this.helpdocuments = data
                 });
         },
         components:{
@@ -33,5 +33,4 @@
 </script>
 
 <style scoped>
-
 </style>

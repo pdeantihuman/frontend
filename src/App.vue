@@ -1,7 +1,7 @@
 <template>
   <div id="app">
       <div id="main">
-          <Head id="head" v-bind:childLogin="canSee"></Head>
+          <Head id="head" v-bind:childLogin="canSee" v-on:reloadList="reload"></Head>
           <router-view v-if="isReload"  v-on:hiddenButton="hiddenChild"></router-view>
       </div>
       <foot id="foot"></foot>
@@ -44,7 +44,7 @@
     }
     #main{
         min-height: 100%;
-        margin-bottom: -65px;//留出foot的空间
+        margin-bottom: -70px;//留出foot的空间
         padding-bottom: 50px;//防止内容和foot发生重叠
     }
     /*#footer,#push {*/

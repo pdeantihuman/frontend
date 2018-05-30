@@ -28,35 +28,10 @@
                 let user = document.getElementById('user').value;
                 let password = document.getElementById('password').value;
                 if (password === ''||user === ''){
-                        this.instance('warning');
-                }
-            },
-            instance (type) {
-                switch (type) {
-                    // case 'info':
-                    //     this.$Modal.info({
-                    //         title: title,
-                    //         content: content
-                    //     });
-                    //     break;
-                    // case 'success':
-                    //     this.$Modal.success({
-                    //         title: title,
-                    //         content: content
-                    //     });
-                    //     break;
-                    case 'warning':
-                        this.$Modal.warning({
-                            title: '警告',
-                            content: '<p>请输入正确的用户名或密码</p>'
-                        });
-                        break;
-                    // case 'error':
-                    //     this.$Modal.error({
-                    //         title: '失败',
-                    //         content:  '<p>你的用户名或密码错误</p>'
-                    //     });
-                    //     break;
+                    this.$Modal.warning({
+                        title: '警告',
+                        content: '<p>请输入正确的用户名或密码</p>'
+                    });
                 }
             }
         },

@@ -18,6 +18,7 @@
 
 <script>
     import 'iview/dist/styles/iview.css'
+    import api from "../api/api";
     export default {
         name: "model",
         props:['node_del_num'],
@@ -27,21 +28,18 @@
                 modal_loading: false
             }
         },
-        mounted(){
-            console.log(this.node_del_num);
-        },
         methods: {
             postDel () {
                 const post_del_num = this.node_del_num;
-                const post_url = `http://10.1.38.20/api/articles/${post_del_num}?id=${post_del_num}`;
+                // const post_url = `http://helper.test/api/articles/${post_del_num}?id=${post_del_num}`;
+                const post_url = `${api.for_node}${post_del_num}?id=${post_del_num}`;
                 this.modal_loading = true;
                 axios.delete(post_url)
                     .then(response=>{
-                        console.log(response.status)
                         if (response.status === 204){
                             this.modal_loading = false;
                             this.modal2 = false;
-                            this.$parent.$parent.reload();
+                            this.$parent.$parent.reload();//重新刷新list组件，调用list中的reload()
                             this.$Message.success('成功删除');
                         }else if (response.status === 500) {
                             this.modal_loading = false;

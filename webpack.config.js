@@ -92,6 +92,7 @@ module.exports.plugins = (module.exports.plugins || []).concat([
             $: "jquery",
             jQuery: "jquery"
         })
+])
 
 if (process.env.NODE_ENV === 'production') {
     module.exports.devtool = '#source-map'

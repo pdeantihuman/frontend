@@ -18,5 +18,6 @@
 <style scoped>
     .footer{
         background-color: #f8f8f8;
+        margin-top: 20px;
     }
 </style>

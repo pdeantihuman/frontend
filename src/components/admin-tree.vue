@@ -1,109 +1,18 @@
 <template>
     <div>
-        <Tree :data="data3" :load-data="loadData" :render="renderContent" ref="tree" v-if="new_tree==='new'"></Tree>
-        <Tree :data="data3" :load-data="loadData" :render="renderContent" ref="tree" v-else></Tree>
+        <Tree :data="data3" :load-data="loadData" :render="renderContent" ref="tree"></Tree>
     </div>
-
 </template>
 <script>
+    import api from "../api/api";
+
     export default {
         props:['new_tree','docId'],//docId是文档id
         data () {
             return {
-                // data1: [//可嵌套的节点属性的数组，生成tree的数据
-                //     {
-                //         title: 'parent 1',//根节点标题
-                //         expand: true,//是否展开所属节点
-                //         render: (h, { root, node, data }) => {//定义当前节点渲染内容
-                //             return h('span', {//根节点渲染规则
-                //                 style: {
-                //                     display: 'inline-block',
-                //                     width: '100%'
-                //                 },
-                //             }, [
-                //                 h('span', [
-                //                     h('Icon', {
-                //                         props: {
-                //                             type: 'ios-folder-outline'
-                //                         },
-                //                         style: {
-                //                             marginRight: '8px'
-                //                         }
-                //                     }),
-                //                     h('span', {
-                //                         domProps:{
-                //                             innerHTML:data.title
-                //                         },
-                //                         // attrs:{
-                //                         //     tabindex:"1"//使span元素也能使用:focus
-                //                         // },
-                //                         'class':{
-                //                             mouse_over:true
-                //                         },
-                //                         on: {
-                //                             click: () => {
-                //                             this.getNode(data);
-                //                             }//给根节点的标题绑定点击事件
-                //                         }
-                //                     })
-                //                 ]),
-                //                 h('span', {
-                //                     style: {
-                //                         display: 'inline-block',
-                //                         float: 'right',
-                //                         marginRight: '32px'
-                //                     }
-                //                 }, [
-                //                     h('Button', {
-                //                         props: Object.assign({}, this.buttonProps, {
-                //                             icon: 'ios-plus-empty',
-                //                             type: 'primary'
-                //                         }),
-                //                         style: {
-                //                             width: '52px'
-                //                         },
-                //                         on: {
-                //                             click: () => { this.append(data) }
-                //                         }
-                //                     })
-                //                 ])
-                //             ]);
-                //         },
-                //         children: [//子节点属性数组
-                //             {
-                //                 title: 'child 1-1',
-                //                 expand: true,
-                //                 children: [
-                //                     {
-                //                         title: 'leaf 1-1-1',
-                //                         expand: true
-                //                     },
-                //                     {
-                //                         title: 'leaf 1-1-2',
-                //                         expand: true
-                //                     }
-                //                 ]
-                //             },
-                //             {
-                //                 title: 'child 1-2',
-                //                 expand: true,
-                //                 children: [
-                //                     {
-                //                         title: 'leaf 1-2-1',
-                //                         expand: true
-                //                     },
-                //                     {
-                //                         title: 'leaf 1-2-1',
-                //                         expand: true
-                //                     }
-                //                 ]
-                //             }
-                //         ]
-                //     }
-                // ],
                 data3: [//新文档的初始数据
                                 {
-                                    title: 'parent 1',//新根节点标题
+                                    title: '帮助文档二叉树',//新根节点标题
                                     expand: false,//是否展开所属节点
                                     loading:false,
                                     children:[],
@@ -126,38 +35,6 @@
                                                 h('span', {
                                                     domProps:{
                                                         innerHTML:data.title
-                                                    },
-                                                    attrs:{
-                                                        tabindex:"1"
-                                                    },
-                                                    'class':{
-                                                        mouse_over:true
-                                                    },
-                                                    on: {
-                                                        click: () => {
-                                                            this.getNode(data)//给根节点的标题绑定点击事件
-                                                        }
-
-                                                    }
-                                                })
-                                            ]),
-                                            h('span', {
-                                                style: {
-                                                    display: 'inline-block',
-                                                    float: 'right',
-                                                    marginRight: '32px'
-                                                }
-                                            }, [
-                                                h('Button', {
-                                                    props: Object.assign({}, this.buttonProps, {
-                                                        icon: 'ios-plus-empty',
-                                                        type: 'primary'
-                                                    }),
-                                                    style: {
-                                                        width: '52px'
-                                                    },
-                                                    on: {
-                                                        click: () => { this.append(data) }
                                                     }
                                                 })
                                             ])
@@ -178,9 +55,8 @@
             }
         },
         methods: {
-        	loadData (item, callback) {
+            loadData (item, callback) {
         	    let url = `api/articles/${this.docId}/tree`;
-        	    console.log(url);
                 axios.get(url)
                     .then(response => {
                     const data = [
@@ -192,7 +68,6 @@
                         this.$Message.error('404');
                     })
             },
-
             renderContent (h, { root, node, data }) {//内容渲染相关的属性
                 return h('span', {
                     style: {
@@ -247,24 +122,31 @@
                                 icon: 'ios-minus-empty'
                             }),
                             on: {
-                                click: () => { this.remove(root, node, data) }
+                                click: () => { this.remove(root,node,data) }
                             }
                         })
                     ])
                 ]);
             },
-            getNode(data){
+            getNode(data){//点击节点，获取节点信息然后告知form组件
+                const post_url = `${api.for_node}${data.id}?id=${data.id}`;
                 if (this.select_count === -1){//第一次点击和重复点击不提示确认框
                     this.select_count = data.nodeKey;
-                    console.log(data);
-                    this.$emit('getTheNode',data);
+                    axios.get(post_url)
+                        .then(response=>{
+                            data.body = response.data.data.body;
+                            this.$emit('getTheNode',data)
+                        })
                 }else if(this.select_count !== data.nodeKey){//重复点击弹出确认框
                     this.$Modal.confirm({
                         title:'提示',
-                        content:'<p>是否确定切换节点?</p><p>切换后未提交的编辑内容将被清除!</p>',
+                        content:'<p>确定切换节点?</p><p>切换后未提交的编辑内容将被清除!</p>',
                         onOk:()=>{
-                            console.log(data);
-                            this.$emit('getTheNode',data);
+                            axios.get(post_url)
+                                .then(response=>{
+                                    data.body = response.data.data.body;
+                                    this.$emit('getTheNode',data)
+                                })
                             this.select_count = data.nodeKey;
                             this.$Message.info('切换成功');
                         },
@@ -275,44 +157,145 @@
                 }
             },
             append (data) {//增加一个节点
-        	    //要形成一个二叉树，每个父节点下只能有两个子节点
-        	    if(!data.children){//当该节点下没有子节点，创建的节点为其左子树节点
-                    const children = data.children || [];
-                    children.push({//节点数据为数组形式
-                        title:`appended node ${data.title}`,
-                        parentId:data.id,
-                        body:'左子树',
-                        type:'left',
-                    });
-                    console.log(children)
-                    this.$set(data, 'children', children);//$set是全局Vue.set的别名，用于动态生成data对象中的属性值
-                }else if(data.children[1]===undefined){//当该节点下有一个节点时，创建的节点为其右子树节点
-                    const children = data.children || [];
-                    children.push({//节点数据为数组形式
-                        title:`appended node ${data.title}`,
-                        parentId:data.id,
-                        body:'右子树',
-                        type:'right',
-                    });
-                    console.log(children)
-                    this.$set(data, 'children', children);//$set是全局Vue.set的别名，用于动态生成data对象中的属性值
-                } else {
-                    this.$Message.info('每个父节点只能有两个子节点！');
-                }
+                // axios.get('http://helper.test/api/articles')//获取了数据库中所有的节点，以及相关信息
+                axios.get(api.for_node)//获取了数据库中所有的节点，以及相关信息
+                    .then(response=>{
+                        let rule_table = response.data.data;
+                        for (let i=0;i<rule_table.length;i++){
+                            if(rule_table[i].id===data.id){
 
-        },
-            remove (root, node, data) {//删除一个节点
-                const parentKey = root.find(el => el === node).parent;
-                const parent = root.find(el => el.nodeKey === parentKey).node;
-                const index = parent.children.indexOf(data);
-                parent.children.splice(index, 1);//删除数组parent.children中index位置的一个元素
+                                if (rule_table[i].leftChild!==0 && rule_table[i].rightChild!==0){//如果该节点有两个子节点
+                                    this.$Message.info('每个父节点只能有两个子节点！');
+                                }else if(rule_table[i].leftChild===0){//如果该节点没有左节点，为其创建左节点
+                                    this.$Modal.confirm({
+                                               title:'提示',
+                                               content:'<p>此节点将新建左节点，是否创建?</p><p>新建后为空白节点，需要选中后再次编辑</p>',
+                                               onOk:()=>{
+                                                   // const post_url = `http://10.1.38.20/api/articles`;
+                                                   const post_url = api.for_node;
+                                                   this.modal_loading = true;
+                                                   const children = data.children || [];
+                                                   children.push({//节点数据为数组形式
+                                                       title:`空白节点，父节点： ${data.title}`,
+                                                       parentId:data.id,
+                                                       body:'新建立的节点',
+                                                       type:'left',
+                                                   });
+                                                   this.$set(data, 'children', children);//$set是全局Vue.set的别名，用于动态生成data对象中的属性值
+                                                   const new_index = children.length-1;
+                                                   axios.post(post_url,children[new_index])
+                                                       .then(response=>{
+                                                           if (response.status === 201){
+                                                               this.modal_loading = false;
+                                                               this.modal2 = false;
+                                                               this.$Message.success('成功新建该节点');
+                                                               children[new_index].id = response.data.data.id;
+                                                               this.$set(data, 'children', children);
+                                                           }else if (response.status === 500) {
+                                                               this.modal_loading = false;
+                                                               this.modal2 = false;
+                                                               this.$Message.warning('新建节点失败');
+                                                           }
+                                                       })
+                                                       .catch(error => {
+                                                           this.modal_loading = false;
+                                                           this.modal2 = false;
+                                                           this.$Message.error('无法新建该节点');
+                                                       })
+                                               },
+                                               onCancel:()=>{
+                                                   this.$Message.info('已取消新建节点');
+                                               }
+                                           });
+                                }else if(rule_table[i].rightChild===0){//如果该节点没有右节点，为其创建右节点
+                                    this.$Modal.confirm({
+                                        title:'提示',
+                                        content:'<p>此节点将新建右节点，是否创建?</p><p>新建后为空白节点，需要选中后再次编辑</p>',
+                                        onOk:()=>{
+                                            // const post_url = `http://10.1.38.20/api/articles`;
+                                            const post_url = api.for_node;
+                                            this.modal_loading = true;
+                                            const children = data.children || [];
+                                            children.push({//节点数据为数组形式
+                                                title:`空白节点，父节点： ${data.title}`,
+                                                parentId:data.id,
+                                                body:'新建立的节点',
+                                                type:'right',
+                                            });
+                                            this.$set(data, 'children', children);//$set是全局Vue.set的别名，用于动态生成data对象中的属性值
+                                            const new_index = children.length-1;
+                                            axios.post(post_url,children[new_index])
+                                                .then(response=>{
+                                                    if (response.status === 201){
+                                                        this.modal_loading = false;
+                                                        this.modal2 = false;
+                                                        this.$Message.success('成功新建该节点');
+                                                        children[new_index].id = response.data.data.id;
+                                                    }else if (response.status === 500) {
+                                                        this.modal_loading = false;
+                                                        this.modal2 = false;
+                                                        this.$Message.warning('新建节点失败');
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    this.modal_loading = false;
+                                                    this.modal2 = false;
+                                                    this.$Message.error('无法新建该节点');
+                                                })
+                                        },
+                                        onCancel:()=>{
+                                            this.$Message.info('已取消新建节点');
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    })
+            },
+            remove(root,node,data){
+                this.$Modal.confirm({
+                    title:'提示',
+                    content:'<p>确定删除节点?</p><p>删除后该节点依然存在但内容将被清除，且无法显示!</p>',
+                    onOk:()=>{
+                        const parentKey = root.find(el => el === node).parent;
+                        const parent = root.find(el => el.nodeKey === parentKey).node;
+                        const index = parent.children.indexOf(data);
+                        parent.children.splice(index, 1,data);
+                        const post_del_node = data.id;
+                        // const post_url = `http://helper.test/api/articles/${post_del_node}?id=${post_del_node}`;
+                        const post_url = `${api.for_node}${post_del_node}?id=${post_del_node}`;
+                        this.modal_loading = true;
+                        axios.delete(post_url)
+                            .then(response=>{
+                                if (response.status === 204){
+                                    this.modal_loading = false;
+                                    this.modal2 = false;
+                                    this.$Message.success('成功删除该节点');
+                                    const parentKey = root.find(el => el === node).parent;
+                                    const parent = root.find(el => el.nodeKey === parentKey).node;
+                                    const index = parent.children.indexOf(data);
+                                    parent.children.splice(index, 1);
+                                    this.$emit('getTheNode',{
+                                        body:''
+                                    });
+                                }else if (response.status === 500) {
+                                    this.modal_loading = false;
+                                    this.modal2 = false;
+                                    this.$Message.warning('删除失败');
+                                }
+                            })
+                            .catch(error => {
+                                this.modal_loading = false;
+                                this.modal2 = false;
+                                this.$Message.error('404 没有要删除的节点');
+                            })
+                    },
+                    onCancel:()=>{
+                        this.$Message.info('已取消删除');
+                    }
+                });
             }
         },
-        // mounted(){
-        //     let data2_before = sessionStorage.key(0);
-        //     // TODO:复制上面的渲染函数
-        //     this.data2 = data2_before;
-        // }
     }
 </script>
 
