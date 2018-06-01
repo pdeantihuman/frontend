@@ -71,8 +71,8 @@
             postForm(){//发送编辑的节点数据给后台
                 this.node_info.body = document.getElementById('editor').value;
                 let post_id = this.node_info.id;
-                let post_url = `http://helper.test/api/articles/${post_id}`;//后台接口
-                // let post_url = `${api.for_node}${post_id}`;//后台接口
+                // let post_url = `http://helper.test/api/articles/${post_id}`;//后台接口
+                let post_url = `${api.for_node}${post_id}`;//后台接口
                 axios.patch(post_url,{
                     title:this.node_info.title,
                     parentId:this.node_info.parentId,
