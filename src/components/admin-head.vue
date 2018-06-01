@@ -8,7 +8,8 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right" v-if="childLogin">
                         <li><a @click.prevent="handleRender"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 新建帮助手册</a></li>
-                        <li><router-link to="/Login"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 注销</router-link></li>
+                        <!--<li><router-link @click.prevent="toLogout" to="/Logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 注销</router-link></li>-->
+                        <li><a @click.prevent="toLogout" ><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 注销</a></li>
                     </ul>
                 </div>
             </div>
@@ -23,6 +24,13 @@
         name: "admin-head",
         props:['childLogin'],
         methods:{
+            toLogout:function(){
+                let post_url = api.logout;
+                axios.post(post_url)
+                    .then(()=>{
+                        window.location.href = '/login'
+                    })
+            },
             handleRender () {
                 this.$Modal.confirm({
                     title:"新建文档树：",
