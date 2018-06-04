@@ -275,7 +275,7 @@
                                     const parent = root.find(el => el.nodeKey === parentKey).node;
                                     const index = parent.children.indexOf(data);
                                     parent.children.splice(index, 1);
-                                    this.select_count === -1
+                                    this.select_count = -1;
                                     this.$emit('getTheNode',{
                                         body:''
                                     });
