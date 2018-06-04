@@ -137,7 +137,7 @@
                             data.body = response.data.data.body;
                             this.$emit('getTheNode',data)
                         })
-                }else if(this.select_count !== data.nodeKey){//重复点击弹出确认框
+                }else if(this.select_count !== data.nodeKey){//跳转点击弹出确认框
                     this.$Modal.confirm({
                         title:'提示',
                         content:'<p>确定切换节点?</p><p>切换后未提交的编辑内容将被清除!</p>',
@@ -275,6 +275,7 @@
                                     const parent = root.find(el => el.nodeKey === parentKey).node;
                                     const index = parent.children.indexOf(data);
                                     parent.children.splice(index, 1);
+                                    this.select_count === -1
                                     this.$emit('getTheNode',{
                                         body:''
                                     });
